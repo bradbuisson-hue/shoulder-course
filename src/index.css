@@ -1,0 +1,220 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   Theme tokens — light is the default, .dark overrides.
+   Colors expressed as `R G B` for use with Tailwind alpha syntax.
+========================================================= */
+
+:root {
+  --bg:               250 250 250;   /* zinc-50ish */
+  --panel:            255 255 255;
+  --panel-2:          244 244 245;   /* zinc-100 */
+  --border:           228 228 231;   /* zinc-200 */
+  --border-strong:    212 212 216;   /* zinc-300 */
+  --text:             9 9 11;        /* zinc-950 */
+  --text-muted:       82 82 91;      /* zinc-600 */
+  --text-subtle:      161 161 170;   /* zinc-400 */
+  --accent:           5 150 105;     /* emerald-600 */
+  --accent-hover:     4 120 87;      /* emerald-700 */
+  --accent-soft:      209 250 229;   /* emerald-100 */
+  --success:          22 163 74;     /* green-600 */
+  --danger:           220 38 38;     /* red-600 */
+
+  /* Page background gradient stops */
+  --bg-glow-1:        rgba(16, 185, 129, 0.06);
+  --bg-glow-2:        rgba(99, 102, 241, 0.04);
+}
+
+.dark {
+  --bg:               10 10 11;      /* near-black */
+  --panel:            20 20 23;      /* zinc-900-ish */
+  --panel-2:          28 28 32;
+  --border:           39 39 42;      /* zinc-800 */
+  --border-strong:    63 63 70;      /* zinc-700 */
+  --text:             250 250 250;   /* zinc-50 */
+  --text-muted:       161 161 170;   /* zinc-400 */
+  --text-subtle:      113 113 122;   /* zinc-500 */
+  --accent:           16 185 129;    /* emerald-500 */
+  --accent-hover:     52 211 153;    /* emerald-400 */
+  --accent-soft:      6 78 59;       /* emerald-900 */
+  --success:          34 197 94;
+  --danger:           239 68 68;
+
+  --bg-glow-1:        rgba(16, 185, 129, 0.10);
+  --bg-glow-2:        rgba(99, 102, 241, 0.06);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-bg text-text font-sans;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -20%, var(--bg-glow-1), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, var(--bg-glow-2), transparent 70%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.25);
+    color: rgb(var(--text));
+  }
+
+  /* Subtle focus ring */
+  *:focus-visible {
+    outline: 2px solid rgb(var(--accent) / 0.6);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Hide focus ring on mouse interactions */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+@layer components {
+  /* ---------- Typography helpers ---------- */
+  .eyebrow {
+    @apply font-mono uppercase tracking-widest text-[11px] font-medium text-text-muted;
+  }
+
+  .display {
+    @apply font-sans font-medium tracking-tighter;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium tracking-tight
+           transition-all duration-150 select-none
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none;
+    border-radius: 8px;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent-hover;
+    box-shadow: 0 1px 0 0 rgb(var(--accent) / 0.6) inset, 0 -1px 0 0 rgb(0 0 0 / 0.1) inset;
+  }
+  .btn-primary:hover {
+    box-shadow:
+      0 1px 0 0 rgb(var(--accent) / 0.6) inset,
+      0 -1px 0 0 rgb(0 0 0 / 0.1) inset,
+      0 0 0 4px rgb(var(--accent) / 0.12);
+  }
+  .btn-secondary {
+    @apply btn border border-border bg-panel text-text hover:bg-panel-2 hover:border-border-strong;
+  }
+  .btn-ghost {
+    @apply btn text-text-muted hover:text-text hover:bg-panel-2;
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:opacity-90;
+  }
+
+  /* ---------- Surface ---------- */
+  .card {
+    @apply bg-panel border border-border;
+    border-radius: 12px;
+  }
+
+  .card-hover {
+    @apply transition-all duration-200 hover:border-border-strong;
+  }
+  .card-hover:hover {
+    box-shadow: 0 8px 24px -4px rgb(0 0 0 / 0.06);
+  }
+
+  .dark .card-hover:hover {
+    box-shadow: 0 8px 24px -4px rgb(0 0 0 / 0.4);
+  }
+
+  /* ---------- Inputs ---------- */
+  .input {
+    @apply w-full bg-panel border border-border text-text px-3.5 py-2.5 text-[15px]
+           transition-colors duration-150 placeholder:text-text-subtle
+           focus:outline-none focus:border-accent;
+    border-radius: 8px;
+  }
+  .textarea {
+    @apply input resize-y;
+  }
+
+  /* ---------- Pills / status ---------- */
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 text-2xs font-medium tracking-tight;
+    border-radius: 999px;
+  }
+  .pill-success {
+    @apply pill bg-accent-soft text-accent;
+  }
+  .dark .pill-success {
+    color: rgb(var(--accent-hover));
+    background: rgb(var(--accent) / 0.12);
+  }
+  .pill-neutral {
+    @apply pill bg-panel-2 text-text-muted border border-border;
+  }
+
+  /* ---------- Custom scrollbar ---------- */
+  .clean-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .clean-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .clean-scroll::-webkit-scrollbar-thumb {
+    background: rgb(var(--border-strong));
+    border-radius: 4px;
+  }
+  .clean-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--text-subtle));
+  }
+
+  /* ---------- Decorative grid background ---------- */
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgb(var(--border) / 0.5) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--border) / 0.5) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 80%);
+  }
+
+  /* ---------- Aurora glow for hero ---------- */
+  .hero-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+    background:
+      radial-gradient(ellipse 600px 320px at 20% 30%, rgb(var(--accent) / 0.18), transparent 60%),
+      radial-gradient(ellipse 500px 280px at 80% 70%, rgb(99 102 241 / 0.12), transparent 60%);
+    filter: blur(20px);
+  }
+
+  /* ---------- Loading shimmer ---------- */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgb(var(--panel-2)) 0%,
+      rgb(var(--border)) 50%,
+      rgb(var(--panel-2)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+}
+
+#root {
+  position: relative;
+  z-index: 2;
+}
